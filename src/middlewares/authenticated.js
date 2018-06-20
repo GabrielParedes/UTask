@@ -2,25 +2,25 @@
 
 var jwt = require('jwt-simple');
 var moment = require('moment');
-var secret_key  ='clave_secreta_IN6BM';
+var secret_key  ='UTask_Key';
 
 exports.ensureAuth = function(req, res, next){
 if(!req.headers.authorization){
-    return res.status(404).send({message: 'la peticion no tiene cabecera de autenticacion'});
+    return res.status(404).send({message: 'Unknown header'});
 }
 
 var token = req.headers.authorization.replace(/['"]+/g, '');
 
     try{
-        var payload = jwt.decode(token, secret);
+        var payload = jwt.decode(token, secret_key);
         if(payload.exp <= moment().unix()){
             return res.status(401).send({
-                message : 'el token a expirado'
+                message : 'Expired token'
             });
         }
     }catch(ex){
         return res.status(404).send({
-            message: 'el token no es valido'
+            message: 'Invalid token'
         });
     }
 
