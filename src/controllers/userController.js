@@ -1,30 +1,31 @@
 'use strict'
-
+const express = require('express');
 var bcrypt = require('bcrypt-nodejs');
-var userModel = require('../models/userModel');
-var jwt = require('../services/jwt');
+var User = require('../models/userModel');
+var jwt = require('../services/userAuthenticate');
 var path = require('path');
 var fs = require('fs');
 function home(req, res) {
     res.status(200).send({
         message: 'Hola'
     });
-
 }
 
-function register(req, res){
-    var user = new userModel();
-    var params = req.body;
+function registrar(req, res){
+    var user = new User();
+    console.log(req.body.UserName);
+    console.log(req.body.UserNickname);
+    console.log(req.body.UserPassword);
+    if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
+        user.UserName = req.body.UserName;
+        user.UserLastName = req.body.UserLastName;
+        user.UserEmail = req.body.UserEmail;
+        user.UserPassword = req.body.UserPassword;
+        user.UserNickname = req.body.UserNickname;
+        user.UserImage = null;
 
-    if(params.UserName && params.UserNickname && params.UserPassword){
-      user.UserName: params.UserName,
-      user.UserLastName: params.UserLastName,
-      user.UserEmail: params.UserEmail,
-      user.UserPassword: params.UserPassword,
-      user.UserNickname: params.UserNickname,
-      user.UserImage: null,
 
-        userModel.find({ $or: [
+        User.find({ $or: [
             {email: user.UserEmail.toLowerCase()},
             {nick: user.UserNickname.toLowerCase()}
         ]}).exec((err, users) =>{
@@ -33,7 +34,7 @@ function register(req, res){
             if(users && users.length >= 1){
                 return res.status(500).send({message: 'El usuario ya existe'});
             }else{
-                bcrypt.hash(params.UserPassword, null,null, (err, hash)=>{
+                bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
                     user.UserPassword = hash;
 
                     user.save((err, userStored)=>{
@@ -61,32 +62,34 @@ function login(req, res){
     var email = params.UserEmail;
     var password = params.UserPassword;
 
-    userModel.findOne({email: email}, (err, user)=>{
+    User.findOne({UserEmail: email}, (err, user)=>{
         if(err) return res.status(500).send({message: 'Error en la peticion'});
 
         if(user){
             bcrypt.compare(password, user.UserPassword, (err, check)=>{
                 if(check){
-                    if(params.gettoken){
+                  console.log(check);
+                    //if(req.body.gettoken){
                         return res.status(200).send({
                             token: jwt.createToken(user)
                         });
-                    }else{
-                        user.UserPassword = undefined;
-                        return res.status(200).send({user});
-                    }
+                    //}else{
+
+                        /*user.UserPassword = undefined;
+                        return res.status(200).send({user});*/
+                    //}
                 }else{
-                    return res.status(404).send({message: 'el usuario no se a podido identificar'});
+                    return res.status(404).send({message: 'Wrong password'});
                 }
             });
         }else{
-            return res.status(404).send({message: 'el usuario no se a podido logear'});
+            return res.status(404).send({message: 'Wrong email'});
         }
     });
 }
 
 function uploadImage(req, res){
-    var userId = req.params.UserId;
+    var userId = req.params.id;
 
     if(userId != req.user.sub){
 
@@ -109,7 +112,7 @@ function uploadImage(req, res){
         console.log(file_ext);
 
         if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
-            userModel.findByIdAndUpdate(UserId, {image: file_name}, {new:true}, (err, userUpdated)=>{
+            User.findByIdAndUpdate(userId, {image: file_name}, {new:true}, (err, userUpdated)=>{
                 if(err) return res.status(500).send({message: 'Error en la peticion'});
 
                 if(!userUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usario'});
@@ -147,19 +150,19 @@ function removeFilerOfUploads(res, file_path, message){
  }
 
  function updateUser(req, res){
-    var userId = req.params.UserId;
+    var userId = req.params.id;
     var update = req.body;
 
     //BORRAR LA PROPIEDAD PASSWORD
-    delete update.UserPassword;
+    delete update.password;
 
     if(userId != req.user.sub){
        return res.status(500).send({message: 'No tienes permiso para actualizar los datos del usuario'});
     }
 
     User.find({ $or: [
-       {email: update.UserEmail.toLowerCase()},
-       {nick: update.UserNickname.toLowerCase()}
+       {email: update.email.toLowerCase()},
+       {nick: update.nick.toLowerCase()}
    ]}).exec((err, users)=>{
        var user_isset = false;
        users.forEach((user) =>{
@@ -179,7 +182,7 @@ function removeFilerOfUploads(res, file_path, message){
  }
 
 module.exports = {
-    register,
+    registrar,
     login,
     home,
     uploadImage,

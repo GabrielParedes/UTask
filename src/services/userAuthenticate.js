@@ -2,20 +2,20 @@
 
 var jwt = require('jwt-simple');
 var moment = require('moment');
-var secret = 'clave_secreta_IN6BM';
+var secret_key = 'UTask_Key';
 
-exports.createToken = function(userModel){
+exports.createToken = function(user){
     var payload = {
         sub: user._id,
-        UserName: userModel.UserName,
-        UserLastName: userModel.UserLastName,
-        UserEmail: userModel.UserEmail,
-        UserPassword: userModel.UserPassword,
-        UserNickname: userModel.UserNickname,
-        UserImage: userModel.UserImage,
+        UserName: user.UserName,
+        UserLastName: user.UserLastName,
+        UserEmail: user.UserEmail,
+        UserPassword: user.UserPassword,
+        UserNickname: user.UserNickname,
+        UserImage: user.UserImage,
         iat: moment().unix(),
         exp: moment().add(30, 'days').unix
     };
 
-    return jwt.encode(payload ,secret);
+    return jwt.encode(payload ,secret_key);
 }
