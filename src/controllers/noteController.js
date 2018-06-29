@@ -1,18 +1,18 @@
 'use strict'
 const express = require('express');
 var bcrypt = require('bcrypt-nodejs');
-var User = require('../models/userModel');
+var Note = require('../models/noteModel');
 var jwt = require('../services/userAuthenticate');
 var path = require('path');
 var fs = require('fs');
 
 function userRegister(req, res){
-    var user = new User();
-
+    var note = new Note();
     if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
-        user.UserName = req.body.UserName;
-        user.UserLastName = req.body.UserLastName;
-        user.UserEmail = req.body.UserEmail;
+      //Ultima modificacion colocar "note" en vez de "user"
+        note.UserName = req.body.UserName;
+        note.UserLastName = req.body.UserLastName;
+        note.UserEmail = req.body.UserEmail;
         user.UserPassword = req.body.UserPassword;
         user.UserNickname = req.body.UserNickname;
         user.UserImage = null;
@@ -22,7 +22,7 @@ function userRegister(req, res){
             {UserEmail: user.UserEmail.toLowerCase()},
             {UserNickname: user.UserNickname.toLowerCase()}
         ]}).exec((err, users) =>{
-            if(err) return res.status(500).send({message: 'Request Error'});
+            if(err) return res.status(500).send({message: 'Error en la peticion de usuarios'});
 
             if(users && users.length >= 1){
                 return res.status(500).send({message: 'El usuario ya existe'});
@@ -30,7 +30,7 @@ function userRegister(req, res){
                 bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
                     user.UserPassword = hash;
 
-                    User.save((err, userStored)=>{
+                    user.save((err, userStored)=>{
                         if(err) return res.status(500).send({message: 'Error al guardar el usario'});
 
                         if(userStored){

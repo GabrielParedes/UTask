@@ -11,4 +11,4 @@ var ScheduleSchema = Schema({
   UserId: Number
 })
 
-module.exports = mongoose.model('Schedules', ScheduleSchema);
+module.exports = mongoose.model('Schedule', ScheduleSchema);

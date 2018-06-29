@@ -3,11 +3,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var TaskPSchema = Schema({
+var TaskGSchema = Schema({
   TaskDescription: String,
   TaskStatus: String,
   TaskPriority: Number,
-  UserId: Number
+  MemberId: Number
 })
 
-module.exports = mongoose.model('TaskP', TaskPSchema);
+module.exports = mongoose.model('TaskG', TaskGSchema);

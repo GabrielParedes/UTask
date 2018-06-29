@@ -9,4 +9,4 @@ var NoteSchema = Schema({
   UserId: Number
 })
 
-module.exports = mongoose.model('Notes', NoteSchema);
+module.exports = mongoose.model('Note', NoteSchema);

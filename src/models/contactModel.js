@@ -8,4 +8,4 @@ var ContactSchema = Schema({
   UserId2: Number
 })
 
-module.exports = mongoose.model('Contacts', ContactSchema);
+module.exports = mongoose.model('Contact', ContactSchema);
