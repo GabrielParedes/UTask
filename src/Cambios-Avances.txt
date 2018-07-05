@@ -4,3 +4,5 @@
   *taskmController: Pasa a llamarse taskgController
     *taskgController: Modificacion variables 'taskm'-'taskg'
   *Ya no hay variable 'params': Fue cambiado a 'req.body' para mejor entendimiento
+---Avance 05/07---
+  *userController: Delete terminado y traducciones

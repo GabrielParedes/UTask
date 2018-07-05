@@ -30,7 +30,7 @@ function userRegister(req, res){
                 bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
                     user.UserPassword = hash;
 
-                    User.save((err, userStored)=>{
+                    user.save((err, userStored)=>{
                         if(err) return res.status(500).send({message: 'Error al guardar el usario'});
 
                         if(userStored){
@@ -170,11 +170,24 @@ function removeFilerOfUploads(res, file_path, message){
    })
  }
 
+ function deleteUser(req, res){
+    var userId = req.params.id;
+
+   User.findByIdAndRemove(userId ,(err, userDeleted) => {
+       if(err) return res.status(500).send({message: 'Error en la peticion'});
+
+       if(!userDeleted) return res.status(404).send({message: 'No se ha podido eliminar el usuario'});
+
+       return res.status(200).send({message: 'Usuario eliminado'});
+    });
+ }
+
+
 module.exports = {
     userRegister,
     userLogin,
-    home,
     uploadImage,
     getImageFile,
-    updateUser
+    updateUser,
+    deleteUser
 }
