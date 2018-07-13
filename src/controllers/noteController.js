@@ -8,21 +8,17 @@ var fs = require('fs');
 
 function userRegister(req, res){
     var note = new Note();
-    if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
-      //Ultima modificacion colocar "note" en vez de "user"
-        note.UserName = req.body.UserName;
-        note.UserLastName = req.body.UserLastName;
-        note.UserEmail = req.body.UserEmail;
-        user.UserPassword = req.body.UserPassword;
-        user.UserNickname = req.body.UserNickname;
-        user.UserImage = null;
 
+    if(req.params.id){
+        note.NoteTitle = req.body.NoteTitle;
+        note.NoteDescription = req.body.NoteDescription;
+        note.UserId = req.user.sub;
 
         User.find({ $or: [
             {UserEmail: user.UserEmail.toLowerCase()},
             {UserNickname: user.UserNickname.toLowerCase()}
         ]}).exec((err, users) =>{
-            if(err) return res.status(500).send({message: 'Error en la peticion de usuarios'});
+            if(err) return res.status(500).send({message: 'Request Error'});
 
             if(users && users.length >= 1){
                 return res.status(500).send({message: 'El usuario ya existe'});
@@ -170,11 +166,24 @@ function removeFilerOfUploads(res, file_path, message){
    })
  }
 
+ function deleteUser(req, res){
+    var userId = req.params.id;
+
+   User.findByIdAndRemove(userId ,(err, userDeleted) => {
+       if(err) return res.status(500).send({message: 'Error en la peticion'});
+
+       if(!userDeleted) return res.status(404).send({message: 'No se ha podido eliminar el usuario'});
+
+       return res.status(200).send({message: 'Usuario eliminado'});
+    });
+ }
+
+
 module.exports = {
     userRegister,
     userLogin,
-    home,
     uploadImage,
     getImageFile,
-    updateUser
+    updateUser,
+    deleteUser
 }

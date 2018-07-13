@@ -6,6 +6,32 @@ var jwt = require('../services/userAuthenticate');
 var path = require('path');
 var fs = require('fs');
 
+function userList(req, res){
+  User.find({ $or: [
+      {UserEmail: user.UserEmail.toLowerCase()},
+      {UserNickname: user.UserNickname.toLowerCase()}
+  ]}).exec((err, users) =>{
+      if(err) return res.status(500).send({message: 'Request Error'});
+
+      if(users && users.length >= 1){
+          return res.status(500).send({message: 'User already exists'});
+      }else{
+          bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
+              user.UserPassword = hash;
+
+              user.save((err, userStored)=>{
+                  if(err) return res.status(500).send({message: 'User register Wrong'});
+
+                  if(userStored){
+                      res.status(200).send({user: userStored})
+                  }else{
+                      res.status(404).send({message: 'Not registered'});
+                  }
+              });
+          });
+      }
+  });
+}
 function userRegister(req, res){
     var user = new User();
 
@@ -25,18 +51,18 @@ function userRegister(req, res){
             if(err) return res.status(500).send({message: 'Request Error'});
 
             if(users && users.length >= 1){
-                return res.status(500).send({message: 'El usuario ya existe'});
+                return res.status(500).send({message: 'User already exists'});
             }else{
                 bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
                     user.UserPassword = hash;
 
                     user.save((err, userStored)=>{
-                        if(err) return res.status(500).send({message: 'Error al guardar el usario'});
+                        if(err) return res.status(500).send({message: 'User register Wrong'});
 
                         if(userStored){
                             res.status(200).send({user: userStored})
                         }else{
-                            res.status(404).send({message: 'no se ha registrado el usuario'});
+                            res.status(404).send({message: 'Not registered'});
                         }
                     });
                 });
@@ -44,7 +70,7 @@ function userRegister(req, res){
         });
     }else{
         res.status(200).send({
-            message: 'Rellene todos los datos necesarios'
+            message: 'Fill all fields'
         });
     }
 
@@ -53,7 +79,7 @@ function userRegister(req, res){
 function userLogin(req, res){
 
     User.findOne({UserEmail: req.body.UserEmail}, (err, user)=>{
-        if(err) return res.status(500).send({message: 'Error en la peticion'});
+        if(err) return res.status(500).send({message: 'Request Wrong'});
 
         if(user){
             bcrypt.compare(req.body.UserPassword, user.UserPassword, (err, check)=>{
@@ -103,20 +129,20 @@ function uploadImage(req, res){
 
         if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
             User.findByIdAndUpdate(userId, {image: file_name}, {new:true}, (err, userUpdated)=>{
-                if(err) return res.status(500).send({message: 'Error en la peticion'});
+                if(err) return res.status(500).send({message: 'Request Wrong'});
 
-                if(!userUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usario'});
+                if(!userUpdated) return res.status(404).send({message: 'Cannot update user'});
 
                 return res.status(200).send({user: userUpdated});
             });
         }else{
-            return removeFilerOfUploads(res, file_path, 'Extension no valida');
+            return removeFilerOfUploads(res, file_path, 'Invalid extension');
         }
 
 
 
     }else{
-        return res.status(200).send({message: 'no se han subido imagenes'});
+        return res.status(200).send({message: 'Upload Wrong'});
     }
 
 }
@@ -134,7 +160,7 @@ function removeFilerOfUploads(res, file_path, message){
          if(exists){
              res.sendFile(path.resolve(path_file));
          }else{
-             res.status(200).send({message: 'No existe la imagen'});
+             res.status(200).send({message: 'Image doesnt exist'});
          }
      });
  }
