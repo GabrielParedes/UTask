@@ -9,10 +9,11 @@ var multipart = require('connect-multiparty');
 var md_upload =  multipart({uploadDir: './src/uploads/users'});
 
 var api = express.Router();
-api.get('/get-image-user/:imageFile', userController.getImageFile);
-api.post('/register', userController.userRegister);
-api.post('/login', userController.userLogin);
-api.post('/update-image-user/:id', [md_auth.ensureAuth, md_upload] ,userController.uploadImage);
-api.put('/update-user/:id', md_auth.ensureAuth ,userController.updateUser);
-api.delete('/deleteUser/:id', userController.deleteUser);
+api.get('/user/list', userController.userList);
+api.get('/user/getImage/:imageFile', userController.getImageFile);
+api.post('/user/register', userController.userRegister);
+api.post('/user/login', userController.userLogin);
+api.post('/user/updateImage/:id', [md_auth.ensureAuth, md_upload] ,userController.uploadImage);
+api.put('/user/update/:id' ,userController.updateUser);
+api.delete('/user/delete/:id', userController.deleteUser);
 module.exports = api;

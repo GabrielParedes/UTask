@@ -7,31 +7,17 @@ var path = require('path');
 var fs = require('fs');
 
 function userList(req, res){
-  User.find({ $or: [
-      {UserEmail: user.UserEmail.toLowerCase()},
-      {UserNickname: user.UserNickname.toLowerCase()}
-  ]}).exec((err, users) =>{
-      if(err) return res.status(500).send({message: 'Request Error'});
-
-      if(users && users.length >= 1){
-          return res.status(500).send({message: 'User already exists'});
-      }else{
-          bcrypt.hash(req.body.UserPassword, null,null, (err, hash)=>{
-              user.UserPassword = hash;
-
-              user.save((err, userStored)=>{
-                  if(err) return res.status(500).send({message: 'User register Wrong'});
-
-                  if(userStored){
-                      res.status(200).send({user: userStored})
-                  }else{
-                      res.status(404).send({message: 'Not registered'});
-                  }
-              });
-          });
-      }
-  });
+  User.find((error, users) => {
+    if (error) return res.status(500).send(err)
+    return res.status(200).send(users);
+  })
 }
+
+/*Kitten.findById(req.params.kittenId, (err, kitten) => {
+    if (err) return res.status(500).send(err)
+    return res.status(200).send(kitten)
+});*/
+
 function userRegister(req, res){
     var user = new User();
 
@@ -138,9 +124,6 @@ function uploadImage(req, res){
         }else{
             return removeFilerOfUploads(res, file_path, 'Invalid extension');
         }
-
-
-
     }else{
         return res.status(200).send({message: 'Upload Wrong'});
     }
@@ -171,29 +154,11 @@ function removeFilerOfUploads(res, file_path, message){
     //BORRAR LA PROPIEDAD PASSWORD
     delete req.body.UserPassword;
 
-    if(userId != req.user.sub){
-       return res.status(500).send({message: 'No tienes permiso para actualizar los datos del usuario'});
-    }
-
-    User.find({ $or: [
-       {UserEmail: req.body.UserEmail.toLowerCase()},
-       {UserNickname: req.body.UserNickname.toLowerCase()}
-   ]}).exec((err, users)=>{
-       var user_isset = false;
-       users.forEach((user) =>{
-           if(user && user._id != userId) user_isset = true;
-       });
-
-       if(user_isset) return res.status(404).send({message: 'Los datos ya estan en uso'});
-
-       User.findByIdAndUpdate(userId, update, {new:true} ,(err, userUpdated) => {
-           if(err) return res.status(500).send({message: 'Error en la peticion'});
-
-           if(!userUpdated) return res.status(404).send({message: 'No se ha podido actualizar el usuario'});
-
-           return res.status(200).send({user: userUpdated});
-        });
-   })
+    User.findByIdAndUpdate(userId, req.body, {new: true}, (err, userUpdated) => {
+      if (err) return res.status(500).send({message: 'Error en la peticion'});
+      if(!userUpdated) return res.status(404).send({message: 'No se ha podido eliminar el usuario'});
+      return res.send(userUpdated);
+    )}
  }
 
  function deleteUser(req, res){
@@ -201,15 +166,14 @@ function removeFilerOfUploads(res, file_path, message){
 
    User.findByIdAndRemove(userId ,(err, userDeleted) => {
        if(err) return res.status(500).send({message: 'Error en la peticion'});
-
        if(!userDeleted) return res.status(404).send({message: 'No se ha podido eliminar el usuario'});
-
        return res.status(200).send({message: 'Usuario eliminado'});
     });
  }
 
 
 module.exports = {
+    userList,
     userRegister,
     userLogin,
     uploadImage,

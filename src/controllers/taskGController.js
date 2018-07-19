@@ -13,19 +13,19 @@ function createTaskG(req, res){
 
 
 		TaskG.save((err, taskGStored) =>{
-			if(err) return res.status(500).send({message: 'erro al guardar'});
+			if(err) return res.status(500).send({message: 'Error al guardar la tareaG'});
 
 			if(taskGStored){
 				res.status(200).send({taskG: taskGStored});
 			}else{
-				res.status(404).send({ message: 'no se pudo guardar'});
+				res.status(404).send({ message: 'No se ha registrado la tareaG'});
 			}
 		});
 
 	}else{
 
     res.status(200).send({
-			message: 'envia los campos necesarios'
+			message: 'Rellene todos los campos necesarios'
 		});
 	}
 }
