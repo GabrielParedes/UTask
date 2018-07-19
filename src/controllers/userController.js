@@ -6,7 +6,7 @@ var jwt = require('../services/userAuthenticate');
 var path = require('path');
 var fs = require('fs');
 
-function userList(req, res){
+function listUser(req, res){
   User.find((error, users) => {
     if (error) return res.status(500).send(err)
     return res.status(200).send(users);
@@ -18,7 +18,7 @@ function userList(req, res){
     return res.status(200).send(kitten)
 });*/
 
-function userRegister(req, res){
+function registeUser(req, res){
     var user = new User();
 
     if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
@@ -62,30 +62,31 @@ function userRegister(req, res){
 
 }
 
-function userLogin(req, res){
+function loginUser(req, res){
+  var params = req.body;
+  var email = params.email;
+  var password = params.password;
 
-    User.findOne({UserEmail: req.body.UserEmail}, (err, user)=>{
+    User.findOne({UserEmail: email/*req.body.UserEmail*/}, (err, user)=>{
         if(err) return res.status(500).send({message: 'Request Wrong'});
 
         if(user){
-            bcrypt.compare(req.body.UserPassword, user.UserPassword, (err, check)=>{
+            bcrypt.compare(password, user.UserPassword, (err, check)=>{
                 if(check){
-                  console.log(check);
-                    //if(req.body.gettoken){
+                    if(req.body.gettoken){
                         return res.status(200).send({
                             token: jwt.createToken(user)
                         });
-                    //}else{
-
-                        /*user.UserPassword = undefined;
-                        return res.status(200).send({user});*/
-                    //}
+                    }else{
+                        user.UserPassword = undefined;
+                        return res.status(200).send({user});
+                    }
                 }else{
-                    return res.status(404).send({message: 'Wrong password'});
+                    return res.status(404).send({message: 'El usuario no se ha podido identificar'});
                 }
             });
         }else{
-            return res.status(404).send({message: 'Wrong email'});
+            return res.status(404).send({message: 'El usuario no se ha podido logear'});
         }
     });
 }
