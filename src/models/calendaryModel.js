@@ -1,16 +1,19 @@
 'use strict'
 
-const mongoose= require('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var NoteSchema = Schema({
-  CalendaryTitle :String,
+  CalendaryTitle: String,
   CalendaryDescription: String,
   CalendaryStartTime: Date,
   CalendaryEndTime: Date,
   CalendaryStartDate: Date,
   CalendaryEndTime: Date,
-  UserId {type: Schema.ObjectId, ref: 'User'}
+  UserId {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 })
 
 module.exports = mongoose.model('Calendary', CalendarySchema);

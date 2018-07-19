@@ -6,7 +6,10 @@ const Schema = mongoose.Schema;
 var NoteSchema = Schema({
   NoteTitle: String,
   NoteDescription: String,
-  UserId {type: Schema.ObjectId, ref: 'User'}
+  UserId {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 
 })
 

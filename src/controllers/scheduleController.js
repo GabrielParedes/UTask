@@ -1,11 +1,13 @@
 'use strict'
 const express = require('express');
-var Note = require('../models/noteModel');
+var Schedule = require('../models/scheduleModel');
 var path = require('path');
 var fs = require('fs');
 
-function listNotes(req, res) {
-  Note.findOne((error, notes) => {
+//modificar note por schema las minusculas
+
+function listSchedules(req, res) {
+  Schedule.findOne((error, notes) => {
     if (error) return res.status(500).send(err)
     return res.status(200).send(notes);
   })
@@ -16,13 +18,15 @@ function listNotes(req, res) {
     return res.status(200).send(kitten)
 });*/
 
-function createNote(req, res) {
-  var note = new Note();
+function createSchedule(req, res) {
+  var note = new Schedule();
 
-  note.NoteTitle = req.body.NoteTitle;
-  note.NoteDescription = req.body.NoteDescription;
+  note.SchemaDay = req.body.SchemaDay;
+  note.SchemaDescription = req.body.SchemaDescription;
+  note.SchemaStart = req.body.SchemaStart;
+  note.SchemaEnd = req.body.SchemaEnd;
   //Foranea
-  //note.NoteEmail = req.body.UserEmail;
+  //note.UserId = req.params.UserId;
 
   //note.save((err, noteStored)=>{
   if (err) return res.status(500).send({
@@ -42,10 +46,10 @@ function createNote(req, res) {
 
 }
 
-function updateNote(req, res) {
+function updateSchedule(req, res) {
   var noteId = req.params.id;
 
-  Note.findByIdAndUpdate(noteId, req.body, {
+  Schema.findByIdAndUpdate(noteId, req.body, {
       new: true
     }, (err, noteUpdated) => {
       if (err) return res.status(500).send({
@@ -59,10 +63,10 @@ function updateNote(req, res) {
   }
 }
 
-function deleteNote(req, res) {
+function deleteSchedule(req, res) {
   var noteId = req.params.id;
 
-  Note.findByIdAndRemove(noteId, (err, noteDeleted) => {
+  Schema.findByIdAndRemove(noteId, (err, noteDeleted) => {
     if (err) return res.status(500).send({
       message: 'Error en la peticion'
     });
@@ -77,8 +81,8 @@ function deleteNote(req, res) {
 
 
 module.exports = {
-  listNotes,
-  createNote,
-  updateNote,
-  deleteNote
+  listSchemas,
+  createSchema,
+  updateSchema,
+  deleteSchema
 }
