@@ -10,7 +10,7 @@ var NoteSchema = Schema({
   CalendaryEndTime: Date,
   CalendaryStartDate: Date,
   CalendaryEndTime: Date,
-  UserId {type: Schema.ObjectId, ref: 'User'}
+  UserId: {type: Schema.ObjectId, ref: 'User'}
 })
 
 module.exports = mongoose.model('Calendary', CalendarySchema);

@@ -10,8 +10,8 @@ var md_upload =  multipart({uploadDir: './src/uploads/users'});
 
 var api = express.Router();
 api.get('/get-image-user/:imageFile', userController.getImageFile);
-api.post('/register', userController.userRegister);
-api.post('/login', userController.userLogin);
+api.post('/user/userRegister', userController.userRegister);
+api.post('/user/loginUser', userController.userLogin);
 api.post('/update-image-user/:id', [md_auth.ensureAuth, md_upload] ,userController.uploadImage);
 api.put('/update-user/:id', md_auth.ensureAuth ,userController.updateUser);
 api.delete('/deleteUser/:id', userController.deleteUser);

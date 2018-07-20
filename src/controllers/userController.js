@@ -8,7 +8,8 @@ var fs = require('fs');
 
 function userRegister(req, res){
     var user = new User();
-
+    var loginData = new User();
+    
     if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
         user.UserName = req.body.UserName;
         user.UserLastName = req.body.UserLastName;
@@ -51,23 +52,25 @@ function userRegister(req, res){
 }
 
 function userLogin(req, res){
-
-    User.findOne({UserEmail: req.body.UserEmail}, (err, user)=>{
+    var params = req.body;
+    var email = params.UserEmail;
+    var password = params.UserPassword;
+    User.findOne({UserEmail: email}, (err, loginData)=>{
         if(err) return res.status(500).send({message: 'Error en la peticion'});
 
-        if(user){
-            bcrypt.compare(req.body.UserPassword, user.UserPassword, (err, check)=>{
+        if(loginData){
+            bcrypt.compare(password, loginData.UserPassword, (err, check)=>{
                 if(check){
                   console.log(check);
-                    //if(req.body.gettoken){
+                    if(params.gettoken){
                         return res.status(200).send({
-                            token: jwt.createToken(user)
+                            token: jwt.createToken(loginData)
                         });
-                    //}else{
+                    }else{
 
-                        /*user.UserPassword = undefined;
-                        return res.status(200).send({user});*/
-                    //}
+                        loginData.UserPassword = undefined;
+                        return res.status(200).send({loginData});
+                    }
                 }else{
                     return res.status(404).send({message: 'Wrong password'});
                 }

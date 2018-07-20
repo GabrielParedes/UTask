@@ -4,15 +4,15 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 var secret_key = 'UTask_Key';
 
-exports.createToken = function(user){
+exports.createToken = function(loginData){
     var payload = {
-        sub: user._id,
-        UserName: user.UserName,
-        UserLastName: user.UserLastName,
-        UserEmail: user.UserEmail,
-        UserPassword: user.UserPassword,
-        UserNickname: user.UserNickname,
-        UserImage: user.UserImage,
+        sub: loginData._id,
+        UserName: loginData.UserName,
+        UserLastName: loginData.UserLastName,
+        UserEmail: loginData.UserEmail,
+        UserPassword: loginData.UserPassword,
+        UserNickname: loginData.UserNickname,
+        UserImage: loginData.UserImage,
         iat: moment().unix(),
         exp: moment().add(30, 'days').unix
     };
