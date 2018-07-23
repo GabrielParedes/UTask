@@ -13,7 +13,7 @@ function createSchedule(req, res) {
 
   schedule.save((err, scheduleStored) => {
     if (err) return res.status(500).send({
-      message: 'Error al guardar la nota'
+      message: 'Error al guardar el evento'
     });
 
     if (scheduleStored) {
@@ -22,7 +22,7 @@ function createSchedule(req, res) {
       })
     } else {
       res.status(404).send({
-        message: 'no se ha registrado la nota'
+        message: 'no se ha registrado el evento'
       });
     }
   });
@@ -55,7 +55,7 @@ function updateSchedule(req, res) {
       });
 
       if (!scheduleUpdated) return res.status(404).send({
-        message: 'No se ha podido actualizar la nota'
+        message: 'No se ha podido actualizar el evento'
       });
 
       return res.send(scheduleUpdated);
@@ -73,7 +73,7 @@ function deleteSchedule(req, res) {
     });
 
     if (!scheduleDeleted) return res.status(404).send({
-      message: 'No se ha podido eliminar la nota'
+      message: 'No se ha podido eliminar el evento'
     });
 
     return res.status(200).send({
