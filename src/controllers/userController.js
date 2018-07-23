@@ -9,7 +9,7 @@ var fs = require('fs');
 function userRegister(req, res){
     var user = new User();
     var loginData = new User();
-    
+
     if(req.body.UserName && req.body.UserNickname && req.body.UserPassword && req.body.UserEmail){
         user.UserName = req.body.UserName;
         user.UserLastName = req.body.UserLastName;
@@ -144,7 +144,7 @@ function removeFilerOfUploads(res, file_path, message){
 
  function updateUser(req, res){
     var userId = req.params.id;
-
+    var update = req.body;
     //BORRAR LA PROPIEDAD PASSWORD
     delete req.body.UserPassword;
 

@@ -7,7 +7,7 @@ var TaskPSchema = Schema({
   TaskDescription: String,
   TaskStatus: String,
   TaskPriority: Number,
-  UserId: Number
+  UserId: {type: Schema.ObjectId, ref: 'User'}
 })
 
 module.exports = mongoose.model('TaskP', TaskPSchema);

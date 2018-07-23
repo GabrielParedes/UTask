@@ -8,7 +8,7 @@ var ScheduleSchema = Schema({
   SchemaDescription: String,
   SchemaStart: Date,
   SchemaEnd: Date,
-  UserId: Number
+  UserId: {type: Schema.ObjectId, ref: 'User'}
 })
 
 module.exports = mongoose.model('Schedule', ScheduleSchema);

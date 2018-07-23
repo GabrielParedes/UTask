@@ -8,6 +8,9 @@ const mongoose = require('mongoose');
 
 //CARGAR RUTAS
 var user_routes = require('./routes/userRoutes');
+var note_routes = require('./routes/noteRoutes');
+var taskP_routes = require('./routes/taskPRoutes');
+var schedule_routes = require('./routes/scheduleRoutes');
 
 //MIDDLEWARES
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -39,6 +42,9 @@ mongoose.connect('mongodb://localhost:27017/UTaskDB').then(()=>{
 
 //RUTAS
 app.use('/api', user_routes);
+app.use('/api', note_routes);
+app.use('/api', taskP_routes);
+app.use('/api', schedule_routes);
 
 //EXPORTAR
 module.exports = app;
