@@ -30,7 +30,7 @@ function createTaskP(req, res) {
 
 function readTaskP(req, res) {
 
-  TaskP.find((err, taskPRead) => {
+  TaskP.findById(req.params.id,(err, taskPRead) => {
 
     if (err) return res.status(500).send(err)
 
