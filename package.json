@@ -9,9 +9,10 @@
     "connect-multiparty": "^2.1.0",
     "express": "^4.16.3",
     "jwt-simple": "^0.5.1",
-    "mongoose": "^5.1.5",
     "moment": "^2.22.2",
-    "nodemon": "^1.17.5"
+    "mongoose": "^5.1.5",
+    "nodemon": "^1.17.5",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {},
   "scripts": {
