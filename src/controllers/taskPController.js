@@ -1,6 +1,6 @@
 'use strict'
 const express = require('express');
-var taskP = require('../models/taskPModel');
+var TaskP = require('../models/taskPModel');
 
 function createTaskP(req, res) {
   var taskP = new TaskP();
