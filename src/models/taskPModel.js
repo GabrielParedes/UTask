@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var TaskPSchema = Schema({
+  TaskTitle: String,
   TaskDescription: String,
   TaskStatus: String,
   TaskPriority: Number,

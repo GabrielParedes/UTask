@@ -4,7 +4,7 @@ var TaskP = require('../models/taskPModel');
 
 function createTaskP(req, res) {
   var taskP = new TaskP();
-
+  taskP.TaskTitle = req.body.TaskTitle;
   taskP.TaskDescription = req.body.TaskDescription;
   taskP.TaskStatus = req.body.TaskStatus;
   taskP.TaskPriority = req.body.TaskPriority;
@@ -31,7 +31,7 @@ function createTaskP(req, res) {
 function readTaskP(req, res) {
   var userId = req.user.sub;
 
-  TaskP.findById(userId, (err, taskPRead) => {
+  TaskP.findOne(userId, (err, taskPRead) => {
 
     if (err) return res.status(500).send(err)
 
@@ -67,7 +67,7 @@ function deleteTaskP(req, res) {
   var taskPId = req.params.id;
 
 
-  TaskP.findByIdAndRemove(noteId, (err, taskPDeleted) => {
+  TaskP.findByIdAndRemove(taskPId, (err, taskPDeleted) => {
     if (err) return res.status(500).send({
       message: 'Error en la peticion'
     });
