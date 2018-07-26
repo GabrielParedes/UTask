@@ -3,13 +3,13 @@
 const mongoose= require('mongoose');
 const Schema = mongoose.Schema;
 
-var NoteSchema = Schema({
+var CalendarySchema = Schema({
   CalendaryTitle :String,
   CalendaryDescription: String,
   CalendaryStartTime: Date,
   CalendaryEndTime: Date,
   CalendaryStartDate: Date,
-  CalendaryEndTime: Date,
+  CalendaryEndDate: Date,
   UserId: {type: Schema.ObjectId, ref: 'User'}
 })
 

@@ -7,7 +7,7 @@ var TaskGSchema = Schema({
   TaskDescription: String,
   TaskStatus: String,
   TaskPriority: Number,
-  MemberId: Number
+  MemberId: {type: Schema.ObjectId, ref: 'Member'}
 })
 
 module.exports = mongoose.model('TaskG', TaskGSchema);

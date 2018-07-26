@@ -30,7 +30,7 @@ function createNote(req, res) {
 function readNote(req, res) {
   var userId = req.user.sub;
 
-  Note.find(userId, (err, noteRead) => {
+  Note.find({UserId: userId}, (err, noteRead) => {
 
     if (err) return res.status(500).send(err)
 

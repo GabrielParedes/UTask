@@ -11,6 +11,7 @@ var user_routes = require('./routes/userRoutes');
 var note_routes = require('./routes/noteRoutes');
 var taskP_routes = require('./routes/taskPRoutes');
 var schedule_routes = require('./routes/scheduleRoutes');
+var calendary_routes = require('./routes/calendaryRoutes')
 
 //MIDDLEWARES
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -45,6 +46,7 @@ app.use('/api', user_routes);
 app.use('/api', note_routes);
 app.use('/api', taskP_routes);
 app.use('/api', schedule_routes);
+app.use('/api', calendary_routes);
 
 //EXPORTAR
 module.exports = app;
