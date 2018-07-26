@@ -31,7 +31,7 @@ function createTaskP(req, res) {
 function readTaskP(req, res) {
   var userId = req.user.sub;
 
-  TaskP.find(userId, (err, taskPRead) => {
+  TaskP.find({UserId: userId}, (err, taskPRead) => {
 
     if (err) return res.status(500).send(err)
 
