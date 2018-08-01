@@ -43,7 +43,7 @@ function createCalendary(req, res) {
 function readCalendary(req, res) {
   var userId = req.user.sub;
 
-  Calendary.find({UserId: userId}(err, calendaryRead) => {
+  Calendary.find({UserId: userId}, (err, calendaryRead) => {
 
     if (err) return res.status(500).send(err)
 
